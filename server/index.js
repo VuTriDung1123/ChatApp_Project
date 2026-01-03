@@ -9,7 +9,9 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: "*", // Cho phép tất cả (Sau này có link Vercel thì thay link Vercel vào đây cho bảo mật)
+}));
 app.use(express.json());
 app.use("/api/auth", userRoutes);
 app.use("/api/messages", messageRoutes);
@@ -24,11 +26,10 @@ mongoose
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });
-
+// Cấu hình Socket.io
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: "*", // Cho phép tất cả
   },
 });
 
