@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const socketIo = require("socket.io");
 const userRoutes = require("./routes/userRoutes");
+const messageRoutes = require("./routes/messages");
 require("dotenv").config();
 
 const app = express();
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", userRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Kết nối MongoDB
 mongoose
