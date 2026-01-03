@@ -49,12 +49,13 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    // Lấy tất cả user trong DB, TRỪ user đang gọi API này (dùng $ne: Not Equal)
     const users = await User.find({ _id: { $ne: req.params.id } }).select([
       "email",
       "username",
       "avatarImage",
       "_id",
+      "isOnline", // <--- Nhớ lấy thêm 2 trường này
+      "lastSeen", // <---
     ]);
     return res.json(users);
   } catch (ex) {
