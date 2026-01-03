@@ -48,21 +48,28 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (handleValidation()) {
-      const { password, username, email } = values;
-      const { data } = await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password,
-      });
+    // Thêm try-catch để bắt lỗi mạng
+    try {
+      if (handleValidation()) {
+        const { password, username, email } = values;
+        const { data } = await axios.post("http://localhost:5000/api/auth/register", {
+          username,
+          email,
+          password,
+        });
 
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
+        if (data.status === false) {
+          toast.error(data.msg, toastOptions);
+        }
+        if (data.status === true) {
+          localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+          navigate("/");
+        }
       }
-      if (data.status === true) {
-        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
-        navigate("/");
-      }
+    } catch (error) {
+      // Nếu server chết hoặc lỗi mạng, nó sẽ hiện thông báo này
+      toast.error("Lỗi kết nối Server! Bạn đã bật Backend chưa?", toastOptions);
+      console.error("Chi tiết lỗi:", error);
     }
   };
 
