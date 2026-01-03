@@ -39,3 +39,24 @@ io.on("connection", (socket) => {
     console.log("👋 Người dùng đã ngắt kết nối");
   });
 });
+
+// Tạo một Map để lưu user nào đang dùng socket nào
+global.onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+
+  // 1. Khi user đăng nhập, lưu socket id của họ lại
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+  // 2. Khi user gửi tin nhắn
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to); // Tìm socket của người nhận
+    if (sendUserSocket) {
+      // Nếu người nhận đang online, bắn tin nhắn sang cho họ ngay
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
+});
