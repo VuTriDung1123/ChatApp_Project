@@ -41,22 +41,54 @@ io.on("connection", (socket) => {
 });
 
 // Tạo một Map để lưu user nào đang dùng socket nào
+const User = require("./models/User"); // Nhớ thêm dòng này ở đầu file để gọi DB
+
 global.onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;
 
-  // 1. Khi user đăng nhập, lưu socket id của họ lại
-  socket.on("add-user", (userId) => {
+  // 1. Khi User Online (Đăng nhập vào)
+  socket.on("add-user", async (userId) => {
     onlineUsers.set(userId, socket.id);
+    // Cập nhật DB là đang Online
+    await User.findByIdAndUpdate(userId, { isOnline: true });
+    // Báo cho mọi người biết user này vừa Online
+    socket.broadcast.emit("user-status-change", { userId, isOnline: true });
   });
 
-  // 2. Khi user gửi tin nhắn
+  // 2. Gửi tin nhắn (Giữ nguyên)
   socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to); // Tìm socket của người nhận
+    const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
-      // Nếu người nhận đang online, bắn tin nhắn sang cho họ ngay
       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
+
+  // 3. Khi User ngắt kết nối (Tắt tab hoặc Logout)
+  socket.on("disconnect", async () => {
+    // Tìm xem user nào vừa ngắt kết nối dựa trên socket.id
+    let disconnectedUserId = null;
+    for (let [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        disconnectedUserId = userId;
+        break;
+      }
+    }
+
+    if (disconnectedUserId) {
+      onlineUsers.delete(disconnectedUserId);
+      // Cập nhật DB là Offline và lưu giờ LastSeen
+      await User.findByIdAndUpdate(disconnectedUserId, { 
+        isOnline: false, 
+        lastSeen: new Date() 
+      });
+      // Báo cho mọi người biết
+      socket.broadcast.emit("user-status-change", { 
+        userId: disconnectedUserId, 
+        isOnline: false,
+        lastSeen: new Date()
+      });
     }
   });
 });
