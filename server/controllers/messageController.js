@@ -1,5 +1,6 @@
 const Messages = require("../models/messageModel");
 
+// 1. Hàm thêm tin nhắn
 const addMessage = async (req, res, next) => {
   try {
     const { from, to, message } = req.body;
@@ -10,12 +11,13 @@ const addMessage = async (req, res, next) => {
     });
 
     if (data) return res.json({ msg: "Gửi tin nhắn thành công." });
-    return res.json({ msg: "Gửi tin nhắn thất bại." });
+    else return res.json({ msg: "Gửi tin nhắn thất bại." });
   } catch (ex) {
     next(ex);
   }
 };
 
+// 2. Hàm lấy tin nhắn (Kèm thời gian)
 const getMessages = async (req, res, next) => {
   try {
     const { from, to } = req.body;
@@ -30,6 +32,7 @@ const getMessages = async (req, res, next) => {
       return {
         fromSelf: msg.sender.toString() === from,
         message: msg.message.text,
+        time: msg.createdAt, // Đã thêm lấy giờ
       };
     });
     res.json(projectedMessages);
@@ -38,5 +41,5 @@ const getMessages = async (req, res, next) => {
   }
 };
 
-// 👇 XUẤT RA MỘT CỤC NHƯ NÀY CHO CHẮC CHẮN
+// 3. Xuất ra để dùng
 module.exports = { addMessage, getMessages };

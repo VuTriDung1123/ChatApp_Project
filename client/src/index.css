@@ -280,3 +280,59 @@ span a {
   border: none;
   cursor: pointer;
 }
+
+
+/* KHU VỰC HIỂN THỊ TÊN USER ĐANG ĐĂNG NHẬP (Góc dưới trái) */
+.current-user {
+  background-color: #0d0d30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem; 
+}
+.current-user h2 {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* CHỈNH LẠI BONG BÓNG CHAT */
+.message {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  max-width: 40%;
+  overflow-wrap: break-word;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 1rem;
+  color: #d1d1d1;
+  display: flex;
+  flex-direction: column; /* Để thời gian nằm dưới nội dung */
+  gap: 0.3rem;
+}
+
+.time {
+  font-size: 0.7rem;
+  color: #cfcaca;
+  text-align: right; /* Giờ nằm bên phải */
+}
+
+/* Tin mình gửi: Màu tím, căn phải */
+.sended {
+  justify-content: flex-end;
+}
+.sended .content {
+  background-color: #4f04ff21;
+}
+
+/* Tin nhận được: Màu xanh, căn trái */
+.recieved {
+  justify-content: flex-start;
+}
+.recieved .content {
+  background-color: #9900ff20;
+}

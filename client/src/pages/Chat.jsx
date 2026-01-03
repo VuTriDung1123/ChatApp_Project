@@ -68,6 +68,14 @@ export default function Chat() {
               );
             })}
           </div>
+
+          {/* 👇👇 THÊM ĐOẠN NÀY ĐỂ HIỂN THỊ TÊN MÌNH 👇👇 */}
+          {currentUser && (
+            <div className="current-user">
+              <h2>Tôi là: {currentUser.username}</h2>
+            </div>
+          )}
+          
         </div>
 
         {currentChat === undefined ? (
