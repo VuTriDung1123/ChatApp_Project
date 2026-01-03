@@ -52,7 +52,7 @@ export default function Register() {
     try {
       if (handleValidation()) {
         const { password, username, email } = values;
-        const { data } = await axios.post("http://localhost:5000/api/auth/register", {
+        const { data } = await axios.post("https://chatapp-project-w8cm.onrender.com/api/auth/register", {
           username,
           email,
           password,

@@ -43,7 +43,7 @@ export default function Login() {
     event.preventDefault();
     if (handleValidation()) {
       const { password, username } = values;
-      const { data } = await axios.post("http://localhost:5000/api/auth/login", {
+      const { data } = await axios.post("https://chatapp-project-w8cm.onrender.com/api/auth/login", {
         username,
         password,
       });

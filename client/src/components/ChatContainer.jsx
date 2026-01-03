@@ -10,7 +10,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   useEffect(() => {
     async function fetchMessages() {
       if (currentChat && currentUser) {
-        const response = await axios.post("http://localhost:5000/api/messages/getmsg", {
+        const response = await axios.post("https://chatapp-project-w8cm.onrender.com/api/messages/getmsg", {
           from: currentUser._id,
           to: currentChat._id,
         });
@@ -23,7 +23,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   // 2. Xử lý gửi tin nhắn
   const handleSendMsg = async (msg) => {
     // Gửi lên server lưu DB
-    await axios.post("http://localhost:5000/api/messages/addmsg", {
+    await axios.post("https://chatapp-project-w8cm.onrender.com/api/messages/addmsg", {
       from: currentUser._id,
       to: currentChat._id,
       message: msg,

@@ -27,7 +27,7 @@ export default function Chat() {
   // 2. Kết nối Socket
   useEffect(() => {
     if (currentUser) {
-      socket.current = io("https://chatapp-project.onrender.com");
+      socket.current = io("https://chatapp-project-w8cm.onrender.com");
       socket.current.emit("add-user", currentUser._id);
       
       // Lắng nghe sự kiện ai đó Online/Offline
@@ -48,7 +48,7 @@ export default function Chat() {
     async function fetchContacts() {
       if (currentUser) {
         // Cần sửa lại API bên server một chút để trả về isOnline và lastSeen (thường là mặc định đã có nếu select all)
-        const data = await axios.get(`https://chatapp-project.onrender.com/api/auth/allusers/${currentUser._id}`);
+        const data = await axios.get(`https://chatapp-project-w8cm.onrender.com/api/auth/allusers/${currentUser._id}`);
         setContacts(data.data);
       }
     }
