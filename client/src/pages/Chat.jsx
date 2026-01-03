@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Thêm useRef
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client"; // NEW: Import socket
+import ChatContainer from "../components/ChatContainer";
 
 export default function Chat() {
   const navigate = useNavigate();
+  const socket = useRef(); // NEW: Tạo biến socket
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
-  const [currentChat, setCurrentChat] = useState(undefined); // Người đang chat cùng
+  const [currentChat, setCurrentChat] = useState(undefined);
 
-  // 1. Kiểm tra đăng nhập
+  // 1. Kiểm tra login
   useEffect(() => {
     async function checkLogin() {
       if (!localStorage.getItem("chat-app-user")) {
@@ -18,9 +21,17 @@ export default function Chat() {
       }
     }
     checkLogin();
-  }, []);
+  }, [navigate]);
 
-  // 2. Lấy danh sách bạn bè từ Server
+  // 2. NEW: Kết nối Socket khi có currentUser
+  useEffect(() => {
+    if (currentUser) {
+      socket.current = io("http://localhost:5000"); // Kết nối tới server
+      socket.current.emit("add-user", currentUser._id); // Báo danh với server
+    }
+  }, [currentUser]);
+
+  // 3. Lấy danh sách bạn bè (giữ nguyên)
   useEffect(() => {
     async function fetchContacts() {
       if (currentUser) {
@@ -31,7 +42,6 @@ export default function Chat() {
     fetchContacts();
   }, [currentUser]);
 
-  // 3. Xử lý khi chọn một người để chat
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
@@ -39,7 +49,6 @@ export default function Chat() {
   return (
     <div className="chat-container">
       <div className="container">
-        {/* CỘT TRÁI: DANH SÁCH BẠN BÈ */}
         <div className="contacts">
           <div className="brand">
             <h3>Snappy Chat</h3>
@@ -61,14 +70,14 @@ export default function Chat() {
           </div>
         </div>
 
-        {/* CỘT PHẢI: KHUNG CHAT (TẠM THỜI) */}
-        <div className="chat-box-temp">
-           {currentChat === undefined ? (
-             <span>Chào {currentUser?.username}, hãy chọn một người để chat! 👋</span>
-           ) : (
-             <span>Đang chat với: {currentChat.username}</span>
-           )}
-        </div>
+        {currentChat === undefined ? (
+          <div className="chat-box-temp" style={{color: "white", display: "flex", justifyContent: "center", alignItems: "center"}}>
+             <h2>Chào {currentUser?.username}, hãy chọn người để chat! 👋</h2>
+          </div>
+        ) : (
+          /* NEW: Truyền socket xuống ChatContainer */
+          <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
+        )}
       </div>
     </div>
   );

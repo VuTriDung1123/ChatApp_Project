@@ -184,3 +184,99 @@ span a {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+/* Khung hiển thị tin nhắn */
+.chat-container-main {
+  padding-top: 1rem;
+  display: grid;
+  grid-template-rows: 10% 75% 15%; /* Chia dòng: Header - Tin nhắn - Input */
+  gap: 0.1rem;
+  overflow: hidden;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.username h3 {
+  color: white;
+}
+
+/* Khu vực tin nhắn cuộn được */
+.chat-messages {
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto; /* Cho phép lăn chuột */
+}
+
+/* Bong bóng tin nhắn */
+.message {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  max-width: 40%;
+  overflow-wrap: break-word;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 1rem;
+  color: #d1d1d1;
+}
+
+/* Tin nhắn mình gửi (Màu tím, nằm bên phải) */
+.sended {
+  justify-content: flex-end;
+}
+.sended .content {
+  background-color: #4f04ff21;
+}
+
+/* Tin nhắn người khác gửi (Màu xanh, nằm bên trái) */
+.recieved {
+  justify-content: flex-start;
+}
+.recieved .content {
+  background-color: #9900ff20;
+}
+
+/* Thanh nhập liệu */
+.input-container {
+  display: grid;
+  grid-template-columns: 90% 10%;
+  align-items: center;
+  background-color: #080420;
+  padding: 0 2rem;
+}
+
+.input-container input {
+  width: 100%;
+  height: 60%;
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.submit-btn {
+  padding: 0.3rem 2rem;
+  border-radius: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #9a86f3;
+  border: none;
+  cursor: pointer;
+}
